@@ -23,7 +23,8 @@ public class RouteDAOImpl implements RouteDAO {
             session.save(route);
             session.getTransaction().commit();
         } catch (Exception e) {
-            JOptionPane.showMessageDialog(null, e.getMessage(), "Ошибка при вставке", JOptionPane.OK_OPTION);
+            System.err.println("Ошибка при вставке:");
+            System.err.println(e.getCause().toString());
         }
     }
 
@@ -35,7 +36,8 @@ public class RouteDAOImpl implements RouteDAO {
             session.update(route);
             session.getTransaction().commit();
         } catch (Exception e) {
-            JOptionPane.showMessageDialog(null, e.getMessage(), "Ошибка при вставке", JOptionPane.OK_OPTION);
+            System.err.println("Ошибка при вставке:");
+            System.err.println(e.getCause().toString());
         }
     }
 
@@ -49,7 +51,8 @@ public class RouteDAOImpl implements RouteDAO {
             route = session.load(Route.class, id);
             session.getTransaction().commit();
         } catch (Exception e) {
-            JOptionPane.showMessageDialog(null, e.getMessage(), "Ошибка 'findById'", JOptionPane.OK_OPTION);
+            System.err.println("Ошибка 'findById':");
+            System.err.println(e.getCause().toString());
         }
 
         return route;
@@ -74,7 +77,7 @@ public class RouteDAOImpl implements RouteDAO {
         try (Session session = HibernateUtil.getSessionFactory().openSession()){
             routes.addAll(session.createCriteria(Route.class).list());
         } catch (Exception e) {
-            System.err.println("Ошибка 'getAll':");
+            System.err.println("Ошибка при удалении:");
             System.err.println(e.getCause().toString());
         }
         return routes;

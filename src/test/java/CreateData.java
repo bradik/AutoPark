@@ -9,39 +9,13 @@ import java.util.*;
 /**
  * Created by Brad on 15.04.2017.
  */
-public class Test {
+public class CreateData {
+
     public static void main(String[] args) throws SQLException {
 
         generateData();
-        printData();
-
 
         HibernateUtil.shutdown();
-
-    }
-
-    private static void printData() throws SQLException {
-
-        System.out.println("========Все маршруты=========");
-        Collection<Route> routes = Factory.getInstance().getRouteDAO().getAllRoutes();
-        for (Route route : routes) {
-            System.out.println("Маршрут : " + route.getName() + "  Номер маршрута : " + route.getNumber());
-            //Collection<Bus> busses = Factory.getInstance().getBusDAO().getBussesByRoute(route);
-            Set<Bus> busses = route.getBusses();
-            for (Bus bus : busses)
-                System.out.println("Автобус № " + bus.getNumber());
-        }
-
-        System.out.println();
-
-        System.out.println("========Все автобусы=========");
-        Collection<Bus> busses = Factory.getInstance().getBusDAO().getAllBusses();
-        for (Bus bus : busses) {
-            System.out.println("Автобус № " + bus.getNumber());
-            //Collection drivers = Factory.getInstance().getDriverDAO().getDriversByBus(bus);
-            Set<Driver> drivers = bus.getDrivers();
-            drivers.forEach((driver) -> System.out.println("Имя : " + driver.getName() + "   Фамилия: " + driver.getSurname()));
-        }
     }
 
     private static void generateData() throws SQLException {
