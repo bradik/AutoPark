@@ -17,14 +17,13 @@
         <!-- Echo all executed SQL to stdout -->
         <property name="show_sql">false</property>
         <!-- Drop and re-create the database schema on startup -->
-        <property name="hibernate.hbm2ddl.auto">update</property>
+        <property name="hibernate.hbm2ddl.auto">create</property>
 
+        <mapping class="com.bradik.logic.VersionedEntity"/>
+        <mapping class="com.bradik.logic.ManagedEntity"/>
         <mapping class="com.bradik.logic.Bus"/>
         <mapping class="com.bradik.logic.Driver"/>
         <mapping class="com.bradik.logic.Route"/>
 
-        <mapping resource="Driver.hbm.xml"/>
-        <mapping resource="Route.hbm.xml"/>
-        <mapping resource="Bus.hbm.xml"/>
     </session-factory>
 </hibernate-configuration>

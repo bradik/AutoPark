@@ -1,62 +1,63 @@
 package com.bradik.logic;
 
+import org.hibernate.validator.constraints.Length;
+
+import javax.persistence.*;
+import javax.validation.constraints.NotNull;
 import java.util.HashSet;
 import java.util.Set;
 
 /**
  * Created by Brad on 15.04.2017.
  */
-public class Bus {
-    private Long id;
-    private String number;
-    private Long route_id;
-    private Set drivers = new HashSet();
+@Entity
+@Table(name = "busses" , indexes = {@Index(columnList = "number", name = "number_hidx")})
+public class Bus extends ManagedEntity {
 
-    public Bus() {
-    }
+    @NotNull
+    @Length(max = 6)
+    private String number;
+
+    @ManyToOne
+    @JoinColumn(name = "route_id", insertable=false, updatable=false)
+    private Route route;
+
+    @ManyToMany(cascade = CascadeType.ALL, fetch = FetchType.EAGER)
+    @JoinTable(name = "driver_bus",
+            joinColumns = @JoinColumn(name = "bus_id"),
+            inverseJoinColumns = @JoinColumn(name = "driver_id"))
+    private Set<Driver> drivers = new HashSet<>();
+
+    public Bus() {}
 
     public Bus(String number) {
         this.number = number;
     }
 
-    public void setId(Long id) {
-        this.id = id;
+    public void addDriver(Driver driver) { drivers.add(driver); }
+
+    public String getNumber() {
+        return number;
     }
 
     public void setNumber(String number) {
         this.number = number;
     }
 
-    public void setDrivers(Set drivers) {
-        this.drivers = drivers;
+    public Route getRoute() {
+        return route;
     }
 
-    public void setRoute_id(Long route_id) {
-        this.route_id = route_id;
+    public void setRoute(Route route) {
+        this.route = route;
     }
 
-    public Long getId() {
-        return id;
-    }
-
-    public String getNumber() {
-        return number;
-    }
-
-    public Set getDrivers() {
+    public Set<Driver> getDrivers() {
         return drivers;
     }
 
-    public Long getRoute_id() {
-        return route_id;
-    }
-
-    public void addDriver(Driver driver) {
-        drivers.add(driver);
-    }
-
-    public void removeDriver(Driver driver) {
-        drivers.remove(driver);
+    public void setDrivers(Set<Driver> drivers) {
+        this.drivers = drivers;
     }
 
     @Override
@@ -65,7 +66,7 @@ public class Bus {
         if (!this.getClass().equals(obj.getClass())) return false;
 
         Bus obj2 = (Bus) obj;
-        if ((this.id == obj2.getId()) && (this.number.equals(obj2.getNumber()))) {
+        if ((this.getId() == obj2.getId()) && (this.number.equals(obj2.getNumber()))) {
             return true;
         }
         return false;
@@ -74,8 +75,7 @@ public class Bus {
     @Override
     public int hashCode() {
         int tmp = 0;
-        tmp = (id + number).hashCode();
+        tmp = (getId() + number).hashCode();
         return tmp;
     }
-
 }

@@ -16,6 +16,8 @@ public interface BusDAO {
 
     public Bus getBusById(Long bus_id) throws SQLException;
 
+    public Bus getBusByNymber(String number) throws SQLException;
+
     public void deleteBus(Bus bus) throws SQLException;
 
     public Collection getAllBusses() throws SQLException;

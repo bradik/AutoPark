@@ -73,11 +73,11 @@ public class RouteDAOImpl implements RouteDAO {
 
     @Override
     public Collection getAllRoutes() throws SQLException {
-        List routes = new ArrayList();
+        List<Route> routes = new ArrayList();
         try (Session session = HibernateUtil.getSessionFactory().openSession()){
-            routes.addAll(session.createCriteria(Route.class).list());
+            routes = session.createCriteria(Route.class).list();
         } catch (Exception e) {
-            System.err.println("Ошибка при удалении:");
+            System.err.println("Ошибка 'getAll'");
             System.err.println(e.getCause().toString());
         }
         return routes;

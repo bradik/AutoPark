@@ -1,17 +1,34 @@
 package com.bradik.logic;
 
+import org.hibernate.validator.constraints.Length;
+
+import javax.persistence.*;
+import javax.validation.constraints.NotNull;
 import java.util.HashSet;
 import java.util.Set;
 
 /**
  * Created by Brad on 15.04.2017.
  */
-public class Driver {
-    private Long id;
+
+@Entity
+@Table(name = "drivers")
+public class Driver extends ManagedEntity {
+    @NotNull
+    @Length(max = 20)
     private String name;
+
+    @NotNull
+    @Length(max = 20)
     private String surname;
+
     private int age;
-    private Set busses = new HashSet();
+
+    @ManyToMany(cascade = CascadeType.ALL, fetch = FetchType.EAGER)
+    @JoinTable(name = "driver_bus",
+            joinColumns = @JoinColumn(name = "driver_id"),
+            inverseJoinColumns = @JoinColumn(name = "bus_id"))
+    private Set<Bus> busses = new HashSet<>();
 
     public Driver() {
     }
@@ -22,12 +39,8 @@ public class Driver {
         this.age = age;
     }
 
-    public Long getId() {
-        return id;
-    }
-
-    public void setId(Long id) {
-        this.id = id;
+    public void addBus(Bus bus) {
+        busses.add(bus);
     }
 
     public String getName() {
@@ -54,11 +67,11 @@ public class Driver {
         this.age = age;
     }
 
-    public Set getBusses() {
+    public Set<Bus> getBusses() {
         return busses;
     }
 
-    public void setBusses(Set busses) {
+    public void setBusses(Set<Bus> busses) {
         this.busses = busses;
     }
 
@@ -68,7 +81,7 @@ public class Driver {
         if (!this.getClass().equals(obj.getClass())) return false;
 
         Driver obj2 = (Driver) obj;
-        if ((this.id == obj2.getId()) && (this.name.equals(obj2.getName()))) {
+        if ((this.getId() == obj2.getId()) && (this.name.equals(obj2.getName()))) {
             return true;
         }
         return false;
@@ -77,7 +90,7 @@ public class Driver {
     @Override
     public int hashCode() {
         int tmp = 0;
-        tmp = (id + name).hashCode();
+        tmp = (getId() + name).hashCode();
         return tmp;
     }
 }

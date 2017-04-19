@@ -51,9 +51,25 @@ public class BusDAOImpl implements BusDAO {
         return bus;
     }
 
+    @Override
+    public Bus getBusByNymber(String number) throws SQLException {
+        Bus bus = null;
+        try (Session session = HibernateUtil.getSessionFactory().openSession();) {
+
+            Query query = session.createQuery("from Bus where number = :number").setString("number", number);
+            List<Bus> list = query.list();
+            if (list.size()>0)
+                bus = (Bus) list.get(0);
+        } catch (Exception e) {
+            System.err.println("Ошибка 'findByNumber':");
+            System.err.println(e.getCause().toString());
+        }
+        return bus;
+    }
+
     public Collection getAllBusses() throws SQLException {
         List busses = new ArrayList();
-        try (Session session = HibernateUtil.getSessionFactory().openSession();) {
+        try (Session session = HibernateUtil.getSessionFactory().openSession();){
             busses = session.createCriteria(Bus.class).list();
         } catch (Exception e) {
             System.err.println("Ошибка 'getAll'");
